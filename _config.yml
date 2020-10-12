@@ -1,0 +1,3 @@
+theme: jekyll-theme-cayman
+title: Smart heating
+description: Web application combining calendar, weather api and custom heating api
