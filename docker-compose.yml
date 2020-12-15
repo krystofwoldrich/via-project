@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  ui:
+   build: client
+   ports:
+     - "3000:5000"
+  app:
+   build: server
+   ports:
+     - "4000:5000"
+  db:
+   image: mongo:3.6.21
+   volumes:
+     - "./data:/data/db"

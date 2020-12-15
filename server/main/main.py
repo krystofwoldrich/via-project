@@ -21,4 +21,4 @@ api = Api(app,
 
 api.add_namespace(security_resources)
 
-app.run()
+app.run(host="0.0.0.0")
