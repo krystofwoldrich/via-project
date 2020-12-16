@@ -7,3 +7,17 @@ Google calendar will be used to suggest turning heating down, to save on energy.
 [weatherstack API Documentation](https://weatherstack.com/documentation) to get weather forecast.
 
 [Google calendar API Documentation](https://developers.google.com/calendar/quickstart/js) shows how to use it in application front-end using javascript.
+
+## Presentation
+
+<iframe
+	src="https://docs.google.com/presentation/d/e/2PACX-1vSO904qsEWZtYYJj0k5hRa-N7hP1Nw7re1mie4I6P3UwPCWP2sxf8n5DNaUURPa8YMYT80HOB_rb-6w/embed?start=false&loop=false&delayms=60000"
+	frameborder="0"
+	allowfullscreen="true"
+	mozallowfullscreen="true"
+	webkitallowfullscreen="true"
+	style="
+		width: 100%;
+		height: 500px;
+	"
+></iframe>
