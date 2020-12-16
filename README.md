@@ -27,3 +27,11 @@ Google calendar will be used to suggest turning heating down, to save on energy.
 ## Progress
 
 What has been done on the project categorized by weeks.
+
+### 2020 Week 46
+
+- Setup Github Pages, Basic documentation
+- Setup Pipenv development environment
+- Add simple Flask RestPlus API Server
+- Add DateTime to ISO Converter
+- Add User Authentication Endpoint
