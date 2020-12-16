@@ -21,3 +21,7 @@ Google calendar will be used to suggest turning heating down, to save on energy.
 		height: 500px;
 	"
 ></iframe>
+
+## Progress
+
+What has been done on the project categorized by weeks.
