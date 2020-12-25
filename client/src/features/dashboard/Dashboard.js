@@ -23,6 +23,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Login from '../auth/Login';
+import SingleDay from '../calendar/SingleDay';
 
 const drawerWidth = 240;
 
@@ -172,6 +173,12 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
+            {/* Calendar */}
+            <Grid item xs={12} md={6} lg={5}>
+              <Paper className={fixedHeightPaper}>
+                <SingleDay />
+              </Paper>
+            </Grid>
           </Grid>
           <Box pt={4}>
             <Copyright />
