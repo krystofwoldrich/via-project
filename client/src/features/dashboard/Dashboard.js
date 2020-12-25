@@ -24,6 +24,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Login from '../auth/Login';
 import SingleDay from '../calendar/SingleDay';
+import GoogleAuth from '../auth/GoogleAuth';
 
 const drawerWidth = 240;
 
@@ -177,6 +178,12 @@ export default function Dashboard() {
             <Grid item xs={12} md={6} lg={5}>
               <Paper className={fixedHeightPaper}>
                 <SingleDay />
+              </Paper>
+            </Grid>
+            {/* Google Auth */}
+            <Grid item xs={12} md={6} lg={5}>
+              <Paper className={fixedHeightPaper}>
+                <GoogleAuth />
               </Paper>
             </Grid>
           </Grid>
