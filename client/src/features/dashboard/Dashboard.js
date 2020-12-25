@@ -123,7 +123,7 @@ export default function Dashboard() {
     setOpenLoginPopup(!openLoginPopup);
   };
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const fixedHeightPaper = clsx(classes.paper);
 
   return (
     <div className={classes.root}>
