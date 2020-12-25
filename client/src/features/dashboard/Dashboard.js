@@ -23,8 +23,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Login from '../auth/Login';
-import SingleDay from '../calendar/SingleDay';
 import GoogleAuth from '../auth/GoogleAuth';
+import UpcomingEvents from '../calendar/UpcomingEvents';
 
 const drawerWidth = 240;
 
@@ -177,7 +177,7 @@ export default function Dashboard() {
             {/* Calendar */}
             <Grid item xs={12} md={6} lg={5}>
               <Paper className={fixedHeightPaper}>
-                <SingleDay />
+                <UpcomingEvents />
               </Paper>
             </Grid>
             {/* Google Auth */}
