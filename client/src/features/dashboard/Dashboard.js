@@ -22,6 +22,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsIcon from '@material-ui/icons/Settings';
+import Login from '../auth/Login';
 
 const drawerWidth = 240;
 
@@ -107,17 +108,29 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const [openDrawer, setOpenDrawer] = React.useState(true);
+  const [openLoginPopup, setOpenLoginPopup] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpenDrawer(true);
   };
   const handleDrawerClose = () => {
     setOpenDrawer(false);
   };
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleToggleLoginPopper = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+    setOpenLoginPopup(!openLoginPopup);
+  };
+
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-
+      <Popper open={openLoginPopup} anchorEl={anchorEl}>
+        <Paper>
+          <Login/>
+        </Paper>
+      </Popper>
       <AppBar position="absolute" className={clsx(classes.appBar, openDrawer && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -132,6 +145,12 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Smart Heating
           </Typography>
+          <Button
+            color="inherit"
+            onClick={handleToggleLoginPopper}
+          >
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -153,7 +172,6 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-
           </Grid>
           <Box pt={4}>
             <Copyright />
