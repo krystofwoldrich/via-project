@@ -176,19 +176,19 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Calendar */}
-            <Grid item xs={12} md={6} lg={5}>
+            <Grid item xs>
               <Paper className={fixedHeightPaper}>
                 <UpcomingEvents />
               </Paper>
             </Grid>
             {/* Forecast */}
-            <Grid item xs={12} md={6} lg={5}>
+            <Grid item xs>
               <Paper className={fixedHeightPaper}>
                 <UpcomingForecast />
               </Paper>
             </Grid>
             {/* Google Auth */}
-            <Grid item xs={12} md={6} lg={5}>
+            <Grid item xs>
               <Paper className={fixedHeightPaper}>
                 <GoogleAuth />
               </Paper>
