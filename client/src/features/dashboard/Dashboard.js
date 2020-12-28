@@ -25,6 +25,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Login from '../auth/Login';
 import GoogleAuth from '../auth/GoogleAuth';
 import UpcomingEvents from '../calendar/UpcomingEvents';
+import UpcomingForecast from '../weather/UpcomingForecast';
 
 const drawerWidth = 240;
 
@@ -178,6 +179,12 @@ export default function Dashboard() {
             <Grid item xs={12} md={6} lg={5}>
               <Paper className={fixedHeightPaper}>
                 <UpcomingEvents />
+              </Paper>
+            </Grid>
+            {/* Forecast */}
+            <Grid item xs={12} md={6} lg={5}>
+              <Paper className={fixedHeightPaper}>
+                <UpcomingForecast />
               </Paper>
             </Grid>
             {/* Google Auth */}
