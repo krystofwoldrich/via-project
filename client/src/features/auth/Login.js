@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,6 +9,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useDispatch } from 'react-redux';
+import { signIn } from './authSlice';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,10 +36,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    if (login !== '' && password !== '') {
+      dispatch(signIn({login, password}));
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
+    <CssBaseline /> 
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -45,17 +59,19 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Login
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleLogin}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
             autoFocus
+            value={login}
+            onChange={(event) => { setLogin(event.target.value) }}
           />
           <TextField
             variant="outlined"
@@ -67,6 +83,8 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={password}
+            onChange={(event) => { setPassword(event.target.value) }}
           />
           <Button
             type="submit"

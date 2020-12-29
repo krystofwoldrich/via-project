@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -26,6 +26,8 @@ import Login from '../auth/Login';
 import GoogleAuth from '../auth/GoogleAuth';
 import UpcomingEvents from '../calendar/UpcomingEvents';
 import UpcomingForecast from '../weather/UpcomingForecast';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkSignIn, selectIsUserSignIn, signOut } from '../auth/authSlice';
 
 const drawerWidth = 240;
 
@@ -105,13 +107,21 @@ const useStyles = makeStyles((theme) => ({
   },
   fixedHeight: {
     height: "80vh",
-  },
+	},
+	lockedDashboardContainer: {
+		display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+	},
 }));
 
 export default function Dashboard() {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [openDrawer, setOpenDrawer] = React.useState(true);
   const [openLoginPopup, setOpenLoginPopup] = React.useState(false);
+  const [prevIsUserLogin, setPrevIsUserLogin] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpenDrawer(true);
   };
@@ -120,11 +130,24 @@ export default function Dashboard() {
   };
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleToggleLoginPopper = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
+    setAnchorEl(event.currentTarget);
     setOpenLoginPopup(!openLoginPopup);
   };
+  const handleLogout = () => {
+    setPrevIsUserLogin(false);
+    dispatch(signOut());
+  }
+	
+	const isUserSignIn = useSelector(selectIsUserSignIn);
 
-  const fixedHeightPaper = clsx(classes.paper);
+  if (isUserSignIn && !prevIsUserLogin) {
+    setPrevIsUserLogin(true);
+    setOpenLoginPopup(false);
+  }
+
+  useEffect(() => {
+    dispatch(checkSignIn());
+  }, [dispatch, isUserSignIn]);
 
   return (
     <div className={classes.root}>
@@ -148,12 +171,20 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Smart Heating
           </Typography>
-          <Button
-            color="inherit"
-            onClick={handleToggleLoginPopper}
-          >
-            Login
-          </Button>
+          { !isUserSignIn
+            ? <Button
+              color="inherit"
+              onClick={handleToggleLoginPopper}
+            >
+              Login
+            </Button>
+            : <Button
+              color="inherit"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          }
         </Toolbar>
       </AppBar>
       <Drawer
@@ -173,35 +204,53 @@ export default function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Calendar */}
-            <Grid item xs>
-              <Paper className={fixedHeightPaper}>
-                <UpcomingEvents />
-              </Paper>
-            </Grid>
-            {/* Forecast */}
-            <Grid item xs>
-              <Paper className={fixedHeightPaper}>
-                <UpcomingForecast />
-              </Paper>
-            </Grid>
-            {/* Google Auth */}
-            <Grid item xs>
-              <Paper className={fixedHeightPaper}>
-                <GoogleAuth />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
+        { !isUserSignIn
+					? <div className={classes.lockedDashboardContainer}>
+						<Typography variant="body2" color="textSecondary" align="center">
+							Login to see Dashboard.
+						</Typography>
+					</div>
+					: <DashboardContent />
+				}
       </main>
     </div>
   );
 }
+
+export const DashboardContent = () => {
+  const classes = useStyles();
+  const fixedHeightPaper = clsx(classes.paper);
+
+	return (
+		<Container maxWidth="lg" className={classes.container}>
+			<Grid container spacing={3}>
+				{/* Calendar */}
+				<Grid item xs>
+					<Paper className={fixedHeightPaper}>
+						<UpcomingEvents />
+					</Paper>
+				</Grid>
+				{/* Forecast */}
+				<Grid item xs>
+					<Paper className={fixedHeightPaper}>
+						<UpcomingForecast />
+					</Paper>
+				</Grid>
+			</Grid>
+			<Grid container spacing={3}>
+				{/* Google Auth */}
+				<Grid item >
+					<Paper className={fixedHeightPaper}>
+						<GoogleAuth />
+					</Paper>
+				</Grid>
+			</Grid>
+			<Box pt={4}>
+				<Copyright />
+			</Box>
+		</Container>
+	);
+};
 
 export const DrawerMainListItems = () => {
   return (
