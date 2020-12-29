@@ -28,7 +28,7 @@ users = [
 	{
 		'id': '123456789',
 		'username': 'admin',
-		'password': generate_password_hash('admin', method='sha256'),
+		'password': generate_password_hash('ahojahoj', method='sha256'),
 		'email': 'admin@admin.cz',
 		'admin': True,
 		'last_login_at': get_now_utc_iso_string(),
