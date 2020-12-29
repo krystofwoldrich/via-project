@@ -1,7 +1,7 @@
 
 export const getIconUrlById = (
 	id,
-	size = 2,
+	size = 4,
 	type = 'd',
 ) => `http://openweathermap.org/img/wn/${id}${type}@${size}x.png`;
 
