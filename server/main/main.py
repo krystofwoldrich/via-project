@@ -4,6 +4,7 @@ from api.security import security_namespace as security_resources
 from api.user import user_namespace as user_resource
 from api.heating import heating_namespace as heating_resource
 from api.heating_schedule import heating_schedule_namespace as heating_schedule_resource
+from flask_cors import CORS
 
 from parameters import config
 
@@ -16,6 +17,8 @@ authorizations = {
 }
 
 app = Flask(__name__)
+
+CORS(app)
 
 api = Api(app,
 		version = config['api']['version'],

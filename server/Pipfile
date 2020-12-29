@@ -8,6 +8,7 @@ flask = "*"
 flask-restplus = "*"
 pyjwt = "*"
 werkzeug = "==0.16.1"
+flask-cors = "*"
 
 [dev-packages]
 
