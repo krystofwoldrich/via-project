@@ -7,6 +7,7 @@ import CardActions from '@material-ui/core/CardActions';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { CardContent, CardMedia, Typography } from '@material-ui/core';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -52,13 +53,26 @@ export default function UpcomingForecast() {
 				Weather forecast
 			</Typography>
 			<br />
-			{forecast.map(hourForecast => (<Forecast
-				key={hourForecast.id}
-				title={hourForecast.weather}
-				start={hourForecast.startDate}
-				iconUrl={hourForecast.iconUrl}
-				temperature={hourForecast.temperature}
-			/>))}
+			{weatherState === 'idle'
+				? <>
+					<Skeleton width="40%" height="40px" style={{ marginBottom: 0 }} />
+					<Skeleton height="60px" style={{ marginBottom: 0 }} />
+					<Skeleton width="20%" height="40px" style={{ marginBottom: 6 }} />
+					<Skeleton width="40%" height="40px" style={{ marginBottom: 0 }} />
+					<Skeleton height="60px" style={{ marginBottom: 0 }} />
+					<Skeleton width="20%" height="40px" style={{ marginBottom: 6 }} />
+					<Skeleton width="40%" height="40px" style={{ marginBottom: 0 }} />
+					<Skeleton height="60px" style={{ marginBottom: 0 }} />
+					<Skeleton width="20%" height="40px" style={{ marginBottom: 6 }} />
+				</>
+				: forecast.map(hourForecast => (<Forecast
+					key={hourForecast.id}
+					title={hourForecast.weather}
+					start={hourForecast.startDate}
+					iconUrl={hourForecast.iconUrl}
+					temperature={hourForecast.temperature}
+				/>))
+			}
 		</>
 	);
 };

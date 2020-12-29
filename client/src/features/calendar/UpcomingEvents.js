@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUpcomingEvents, selectCalendarState, selectEvents } from './calendarSlice';
 import { selectIsAuth2SignIn } from '../auth/authSlice';
 import { DateTime } from 'luxon';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -47,12 +48,25 @@ export default function UpcomingEvents() {
 				Upcoming events
 			</Typography>
 			<br />
-			{events.map(event => (<Event
-				key={event.id}
-				title={event.title}
-				start={event.startDate}
-				end={event.endDate}
-			/>))}
+			{calendarStatus === 'idle'
+				? <>
+					<Skeleton width="40%" height="40px" style={{ marginBottom: 0 }} />
+					<Skeleton height="60px" style={{ marginBottom: 0 }} />
+					<Skeleton width="20%" height="40px" style={{ marginBottom: 6 }} />
+					<Skeleton width="40%" height="40px" style={{ marginBottom: 0 }} />
+					<Skeleton height="60px" style={{ marginBottom: 0 }} />
+					<Skeleton width="20%" height="40px" style={{ marginBottom: 6 }} />
+					<Skeleton width="40%" height="40px" style={{ marginBottom: 0 }} />
+					<Skeleton height="60px" style={{ marginBottom: 0 }} />
+					<Skeleton width="20%" height="40px" style={{ marginBottom: 6 }} />
+				</>
+				: events.map(event => (<Event
+					key={event.id}
+					title={event.title}
+					start={event.startDate}
+					end={event.endDate}
+				/>))
+			}
 		</>
 	);
 }
