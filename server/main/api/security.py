@@ -47,13 +47,17 @@ def token_required(f):
 			return {'message' : 'Token is missing!'}, 401
 
 		try: 
-			data = jwt.decode(token, SECRET_KEY)
+			data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
 			current_user = None
 			for user in users:
 				if user['id'] == data['id']:
 					current_user = user
 
-		except:
+			if current_user == None:
+				raise "User not found"
+
+		except Exception as e:
+			print(e)
 			return {'message' : 'Token is invalid!'}, 401
 
 		return f(ref, current_user, *args, **kwargs)
@@ -100,7 +104,7 @@ class Login(Resource):
 			return 'Could not verify', 401
 
 		if check_password_hash(user['password'], auth['password']):
-			token = jwt.encode({'id' : user['id'], 'exp' : datetime.utcnow() + timedelta(minutes=30)}, SECRET_KEY)
+			token = jwt.encode({'id' : user['id'], 'exp' : datetime.utcnow() + timedelta(minutes=30)}, SECRET_KEY, algorithm='HS256')
 
 			return {'token' : token}
 
