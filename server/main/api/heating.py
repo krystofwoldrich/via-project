@@ -27,7 +27,8 @@ heating = {
 	},
 }
 
-@heating_namespace.route('/')
+
+@heating_namespace.route('')
 class HeatingList(Resource):
 	def options(self):
 		pass
