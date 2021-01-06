@@ -2,6 +2,10 @@ from flask_restplus import Namespace, fields, Resource
 from flask import request
 from api.security import token_required
 import uuid
+from bson import ObjectId
+from database.database import db
+
+heatings_sechedules_collection = db.heatings_sechedules
 
 heating_schedule_namespace = Namespace('heating/schedule', description='Heating Schedule API functions')
 
@@ -31,19 +35,49 @@ heating_schedule_model = heating_schedule_namespace.inherit('HeatingSchedule', h
 	'setBy': fields.String(require=True, example='1234567890', description='User ID of who set the schedule.'),
 })
 
-#Debug
-heating_schedule = {
-	'KLJLK43268': {
-		'from': '2020-12-15T16:20:34.426644+00:00',
-		'to': '2020-12-15T16:22:34.426644+00:00',
-		'temperature': 21,
-		'id': 'KLJLK43268',
-		'setBy': '1234567890',
-	}
-}
+@heating_schedule_namespace.route('/<heatingId>/schedule/<scheduleId>')
+class HeatingSchedule(Resource):
+	def options(self):
+		pass
+
+	@heating_schedule_namespace.doc(
+		params={'heatingId': 'Heating ID', 'scheduleId' : 'Heating Schedule ID'},
+		body=heating_schedule_update_model,
+		description='Update heating schedule',
+		security='apiKey')
+	@heating_schedule_namespace.response(200, 'Success', heating_schedule_model)
+	@token_required
+	def put(self, current_user, heatingId, scheduleId):
+		data = request.get_json()
+		existingSchedule = None
+		existingSchedule = heatings_sechedules_collection.find_one({ '_id' : ObjectId(scheduleId), 'heatingId' : heatingId })
+		if existingSchedule != None:
+			existingSchedule.update(data)
+			existingSchedule.update({
+				'setBy': current_user['id'],
+			})
+			heatings_sechedules_collection.replace_one({ '_id' : ObjectId(scheduleId) }, existingSchedule)
+			return existingSchedule
+		else:
+			return {}, 400
+
+	@heating_schedule_namespace.doc(
+		params={'heatingId': 'Heating ID', 'scheduleId' : 'Heating Schedule ID'},
+		body=heating_schedule_update_model,
+		description='Delete heating schedule',
+		security='apiKey')
+	@heating_schedule_namespace.response(200, 'Success', heating_schedule_model)
+	@token_required
+	def delete(self, current_user, heatingId, scheduleId):
+		removedSchedule = heatings_sechedules_collection.find_one({ '_id' : ObjectId(scheduleId), 'heatingId' : heatingId })
+		if removedSchedule != None:
+			heatings_sechedules_collection.delete_one({ '_id' : ObjectId(scheduleId), 'heatingId' : heatingId })
+			return removedSchedule
+		else:
+			return {}, 400
 
 @heating_schedule_namespace.route('/<heatingId>/schedule')
-class HeatingSchedule(Resource):
+class HeatingScheduleList(Resource):
 	def options(self):
 		pass
 
@@ -59,14 +93,10 @@ class HeatingSchedule(Resource):
 	@heating_schedule_namespace.response(200, 'Success', fields.List(fields.Nested(heating_schedule_model)))
 	@token_required
 	def get(self, current_user, heatingId):
-		result = []
-		for heating_schedule_item in heating_schedule.values():
-			result.append(heating_schedule_item)
-
-		return result
+		return list(heatings_sechedules_collection.find({ 'heatingId' : heatingId }))
 
 	@heating_schedule_namespace.doc(
-		params={'heatingId': 'Heating ID'},
+		params={'heatingId': 'Heating ID', 'scheduleId' : 'Heating Schedule ID'},
 		body=heating_schedule_create_model,
 		description='Create heating schedule',
 		security='apiKey')
@@ -74,37 +104,9 @@ class HeatingSchedule(Resource):
 	@heating_schedule_namespace.response(200, 'Success', heating_schedule_model)
 	def post(self, current_user, heatingId):
 		data = request.get_json()
-		newSchedule = {
-			'id': str(uuid.uuid4()),
-			'setBy': current_user['id'],
-		}
-		newSchedule.update(data)
-		heating_schedule[newSchedule['id']] = newSchedule
-		return newSchedule
-
-	@heating_schedule_namespace.doc(
-		params={'heatingId': 'Heating ID'},
-		body=heating_schedule_update_model,
-		description='Update heating schedule',
-		security='apiKey')
-	@heating_schedule_namespace.response(200, 'Success', heating_schedule_model)
-	@token_required
-	def put(self, current_user, heatingId):
-		data = request.get_json()
-		scheduleId = data['id']
-		heating_schedule[scheduleId].update(data)
-		return heating_schedule[scheduleId]
-
-	@heating_schedule_namespace.doc(
-		params={'heatingId': 'Heating ID'},
-		body=heating_schedule_update_model,
-		description='Delete heating schedule',
-		security='apiKey')
-	@heating_schedule_namespace.response(200, 'Success', heating_schedule_model)
-	@token_required
-	def delete(self, current_user, heatingId):
-		data = request.get_json()
-		scheduleId = data['id']
-		removedSchedule = heating_schedule[scheduleId]
-		del heating_schedule[scheduleId]
-		return removedSchedule
+		data.update({
+			'setBy' : current_user['id'],
+			'heatingId' : heatingId,
+		})
+		result = heatings_sechedules_collection.insert_one(data)
+		return heatings_sechedules_collection.find_one({ '_id' : result.inserted_id })
