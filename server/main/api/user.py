@@ -1,8 +1,12 @@
 from flask_restplus import Namespace, fields, Resource
+from flask import request
 from api.security import token_required
 from database.database import db
+from bson import ObjectId
+from database.jsonEncoder import JSONEncoder
+import json
 
-users = db.users
+users_collection = db.users
 
 user_namespace = Namespace('user', description='User API functions')
 
@@ -21,15 +25,6 @@ user_update_model = user_namespace.model('UserUpdate', {
 	'weather_api_key': fields.String(require=True, example='HKGHJG65zdakfgkdadsgflskjhfjhf53E46R78TZ98HGZU'),
 })
 
-#Debug
-user = {
-	'id': '1234567890',
-	'username': 'john_doe',
-	'email': 'john_doe@example.com',
-	'admin': True,
-	'last_login_at': '2020-12-15T16:20:34.426644+00:00',
-}
-
 @user_namespace.route('/<id>')
 class User(Resource):
 	def options(self):
@@ -42,7 +37,8 @@ class User(Resource):
 	@user_namespace.response(200, 'Success', user_response_model)
 	@token_required
 	def get(self, current_user, id):
-		return user
+		if current_user['id'] == id:
+			return users_collection.find_one({ '_id': ObjectId(id) })
 
 	@user_namespace.doc(
 		params={'id': 'User ID'},
@@ -52,4 +48,11 @@ class User(Resource):
 	@user_namespace.response(200, 'Success', user_response_model)
 	@token_required
 	def put(self, current_user, id):
-		return user
+		if current_user['id'] == id:
+			data = request.get_json()
+			existingUser = None
+			existingUser = users_collection.find_one({ '_id': ObjectId(id) })
+			if existingUser != None:
+				existingUser.update(data)
+				users_collection.replace_one({ '_id': ObjectId(id) }, existingUser)
+				return existingUser
