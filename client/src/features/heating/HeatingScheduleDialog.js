@@ -12,15 +12,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveHeatingScheduleItem, selectNewSchedule, updateNewSchedule, selectHeatingIdOnDashboard } from './heatingSlice';
 import { DateTime, Duration } from 'luxon';
+import { toISOOptions } from '../calendar/dateTimeOptions';
 
 const DEFAULT_TEMPERATURE = 20;
 
 const defaultTimeToOffset = { hours: 1 };
-
-const toISOOptions = {
-	suppressMilliseconds: true,
-	suppressSeconds: true,
-}
 
 const useStyles = makeStyles((theme) => ({
 	form: {
