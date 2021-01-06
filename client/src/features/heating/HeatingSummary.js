@@ -78,8 +78,6 @@ export const HeatingSelect = ({ onChange }) => {
 		}
 	}, [dispatch, heatings, heatingState]);
 
-	console.log(heatings);
-
 	return (
 		<>
 			<FormControl variant="outlined">

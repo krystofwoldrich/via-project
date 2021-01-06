@@ -76,7 +76,6 @@ export const heatingSlice = createSlice({
 			state.heatingState = 'failed';
 		},
 		[fetchHeatingSchedule.fulfilled]: (state, action) => {
-			console.log(state);
 			const heatingId = action.payload.heatingId;
 			const heatingSchedule = action.payload.result;
 			state.heatings[heatingId].schedule = heatingSchedule.reduce((prev, current) => ({ ...prev, [current._id]: current }), {});
