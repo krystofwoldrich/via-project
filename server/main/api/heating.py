@@ -1,6 +1,10 @@
 from flask_restplus import Namespace, fields, Resource
 from flask import request
 from api.security import token_required
+from database.database import db
+from bson import ObjectId
+
+heatings_collection = db.heatings
 
 heating_namespace = Namespace('heating', description='Heating API functions')
 
@@ -17,17 +21,6 @@ heating_model = heating_namespace.inherit('Heating', heating_update_model, {
 	'id': fields.String(require=True, example='KLJLK43268'),
 })
 
-#Debug
-heating = {
-	'KLJLK43268': {
-		'id': 'KLJLK43268',
-		'name': 'Living room heating',
-		'description': 'Radiator on the left from the window',
-		'current_temperature': 19,
-	},
-}
-
-
 @heating_namespace.route('')
 class HeatingList(Resource):
 	def options(self):
@@ -40,10 +33,7 @@ class HeatingList(Resource):
 	@heating_namespace.response(200, 'Success', fields.List(fields.Nested(heating_model)))
 	@token_required
 	def get(self, current_user):
-		result = []
-		for heating_item in heating.values():
-			result.append(heating_item)
-		return result
+		return list(heatings_collection.find({}))
 
 @heating_namespace.route('/<id>')
 class Heating(Resource):
@@ -54,7 +44,7 @@ class Heating(Resource):
 	@token_required
 	@heating_namespace.response(200, 'Success', heating_model)
 	def get(self, current_user, id):
-		return heating[id]
+		return heatings_collection.find_one({ '_id': ObjectId(id) })
 
 	@heating_namespace.doc(
 		params={'id': 'Heating ID'},
@@ -65,4 +55,7 @@ class Heating(Resource):
 	@token_required
 	def put(self, current_user, id):
 		data = request.get_json()
-		return heating[id].update(data)
+		existingHeating = heatings_collection.find_one({ '_id': ObjectId(id) })
+		existingHeating.update(data)
+		heatings_collection.replace_one({ '_id': ObjectId(id) }, existingHeating)
+		return existingHeating
