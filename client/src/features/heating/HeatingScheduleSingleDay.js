@@ -16,14 +16,14 @@ import { getSelectHeating, fetchHeatingSchedule, getSelectHeatingSchedule, remov
 import { DateTime } from 'luxon';
 
 export const mapHeatingToCalendarSchedule = (heatingSchedule) => heatingSchedule ? heatingSchedule.map((schedule) => ({
-  id: schedule.id,
+  id: schedule._id,
   startDate: schedule.from,
   endDate: schedule.to,
   title: schedule.temperature,
 })) : [];
 
 export const mapCalendarToHeatingSchedule = (calendarSchedule) => ({
-  id: calendarSchedule.id,
+  _id: calendarSchedule.id,
   from: calendarSchedule.startDate,
   to: calendarSchedule.endDate,
   temperature: calendarSchedule.title,

@@ -77,19 +77,19 @@ export const heatingSlice = createSlice({
 			console.log(state);
 			const heatingId = action.payload.heatingId;
 			const heatingSchedule = action.payload.result;
-			state.heatings[heatingId].schedule = heatingSchedule.reduce((prev, current) => ({ ...prev, [current.id]: current }), {});
+			state.heatings[heatingId].schedule = heatingSchedule.reduce((prev, current) => ({ ...prev, [current._id]: current }), {});
 		},
 		[saveHeatingScheduleItem.fulfilled]: (state, action) => {
 			const { heatingId, scheduleItem } = action.payload;
 			const oldSchedule = state.heatings[heatingId].schedule
 			state.heatings[heatingId].schedule = {
 				...oldSchedule,
-				[scheduleItem.id]: scheduleItem,
+				[scheduleItem._id]: scheduleItem,
 			};
 		},
 		[removeHeatingScheduleItem.fulfilled]: (state, action) => {
 			const { heatingId, scheduleItem } = action.payload;
-			delete state.heatings[heatingId].schedule[scheduleItem.id];
+			delete state.heatings[heatingId].schedule[scheduleItem._id];
 		},
 	},
 });
