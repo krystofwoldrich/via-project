@@ -13,6 +13,11 @@ import { fetchUpcomingEvents, selectCalendarState, selectEvents } from './calend
 import { selectIsAuth2SignIn } from '../auth/authSlice';
 import { DateTime } from 'luxon';
 import Skeleton from '@material-ui/lab/Skeleton';
+import NewHeatingScheduleButton from '../heating/NewHeatingScheduleButton';
+import { updateNewSchedule } from '../heating/heatingSlice';
+import { toISOOptions } from './dateTimeOptions';
+
+const DEFAULT_AWAY_TEMP = 17;
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -72,7 +77,16 @@ export default function UpcomingEvents() {
 }
 
 export function Event({ start, end, title }) {
+	const dispatch = useDispatch();
 	const classes = useStyles();
+
+	const handleSetNewHeatingSchedule = () => {
+		dispatch(updateNewSchedule({
+			temperature: DEFAULT_AWAY_TEMP,
+			from: DateTime.fromISO(start).toISO(toISOOptions),
+			to: DateTime.fromISO(end).toISO(toISOOptions),
+		}));
+	};
 
 	return (
 		<Card
@@ -93,7 +107,7 @@ export function Event({ start, end, title }) {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<Button color='primary'>Set heating to away</Button>
+				<NewHeatingScheduleButton color='primary' onClick={handleSetNewHeatingSchedule}>Set heating to away</NewHeatingScheduleButton>
       </CardActions>
 		</Card>
 	)

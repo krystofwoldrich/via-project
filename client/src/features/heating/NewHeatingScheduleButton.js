@@ -2,10 +2,13 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import HeatingScheduleForm from './HeatingScheduleDialog';
 
-export default function NewHeatingScheduleButton({ variant }) {
+export default function NewHeatingScheduleButton({ variant, onClick, children }) {
 	const [open, setOpen] = React.useState(false);
 
 	const handleClickOpen = () => {
+		if (onClick) {
+			onClick();
+		}
 		setOpen(true);
 	};
 
@@ -16,7 +19,7 @@ export default function NewHeatingScheduleButton({ variant }) {
 	return (
 		<>
 			<Button variant={variant} color="primary" onClick={handleClickOpen}>
-				Add new temperature
+				{children ? children : "Add new temperature"}
 			</Button>
 			<HeatingScheduleForm
 				open={open}
