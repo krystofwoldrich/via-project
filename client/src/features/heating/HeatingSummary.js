@@ -34,7 +34,7 @@ const HeatingSummary = () => {
 					Current temp: {heating.current_temperature} °C
 				</Typography>
 				<br />
-				<NewHeatingScheduleButton />
+				<NewHeatingScheduleButton variant='outlined' />
 				<br />
 				<HeatingScheduleSingleDay
 					heatingId={heatingId}
