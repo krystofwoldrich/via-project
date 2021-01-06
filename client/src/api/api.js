@@ -11,17 +11,23 @@ export const getTokenHeader = () => ({
 	'x-access-token': getToken(),
 });
 
+export const getContentType = (body) => {
+	return body ? { 'Content-Type': 'application/json' } : {};
+}
+
 export const doRequest = async (resource, method, body) => {
 	const response = await window.fetch(
 		`${API_BASE_URL}/${resource}`,
 		{
 			method,
-			body,
+			mode: 'cors',
 			headers: {
 				...getTokenHeader(),
+				...getContentType(body),
 				'accept': 'application/json',
-			}
-		},
+			},
+			body: body,
+		}
 	);
 
 	if (!response.ok) {
