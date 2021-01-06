@@ -58,7 +58,7 @@ export const HeatingSelect = ({ onChange }) => {
 
 	useEffect(() => {
 		if (heatings.length > 0 && value === '') {
-			const heatingId = heatings[0].id;
+			const heatingId = heatings[0]._id;
 			setValue(heatingId);
 			callOnChange(heatingId)
 			dispatch(setHeatingIdOnDashboard({ heatingId }));
@@ -78,6 +78,8 @@ export const HeatingSelect = ({ onChange }) => {
 		}
 	}, [dispatch, heatings, heatingState]);
 
+	console.log(heatings);
+
 	return (
 		<>
 			<FormControl variant="outlined">
@@ -91,8 +93,8 @@ export const HeatingSelect = ({ onChange }) => {
 					disabled={heatings.length < 1}
 				>
 					{heatings.map(heating => (<MenuItem
-						key={heating.id}
-						value={heating.id}
+						key={heating._id}
+						value={heating._id}
 					>
 						{heating.name}
 					</MenuItem>))}

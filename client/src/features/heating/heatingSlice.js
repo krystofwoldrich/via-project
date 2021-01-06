@@ -65,7 +65,7 @@ export const heatingSlice = createSlice({
 			state.heatings = action.payload.reduce((prev, current) => {
 				return {
 					...prev,
-					[current.id]: current,
+					[current._id]: current,
 				};
 			}, {});
 			state.heatingState = 'loaded';
