@@ -7,8 +7,12 @@ from functools import wraps
 from parameters import config
 from custom_time.custom_time import get_now_utc_iso_string
 from datetime import datetime, timedelta
+from database.database import db
+from bson import ObjectId
 
 SECRET_KEY = config['api']['secret_key']
+
+users_collection = db.users
 
 security_namespace = Namespace('auth', description='Auth API functions')
 
@@ -23,17 +27,6 @@ login_body_model = security_namespace.model('Login', {
 	'password': fields.String(required=True, example='myAwEsOmE_pass!1234'),
 })
 
-# Debug
-users = [
-	{
-		'id': '123456789',
-		'username': 'admin',
-		'password': generate_password_hash('ahojahoj', method='sha256'),
-		'email': 'admin@admin.cz',
-		'admin': True,
-		'last_login_at': get_now_utc_iso_string(),
-	}
-]
 
 def token_required(f):
 	@wraps(f)
@@ -49,9 +42,7 @@ def token_required(f):
 		try: 
 			data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
 			current_user = None
-			for user in users:
-				if user['id'] == data['id']:
-					current_user = user
+			current_user = users_collection.find_one({'_id': ObjectId(data['id'])})
 
 			if current_user == None:
 				raise "User not found"
@@ -76,15 +67,14 @@ class Register(Resource):
 		hashed_password = generate_password_hash(data['password'], method='sha256')
 
 		new_user = {
-			'id': str(uuid.uuid4()),
-			'username': data['username'],
-			'password': hashed_password,
-			'email': data['email'],
-			'admin': False,
-			'last_login_at': get_now_utc_iso_string(),
+				'username': data['username'],
+				'password': hashed_password,
+				'email': data['email'],
+				'admin': False,
+				'last_login_at': get_now_utc_iso_string(),
 		}
 
-		users.append(new_user)
+		users_collection.insert_one(new_user)
 
 		return {'message' : 'New user created!'}, 201
 
@@ -102,15 +92,21 @@ class Login(Resource):
 			return 'Could not verify', 401
 
 		current_user = None
-		for user in users:
-			if user['username'] == auth['username']:
-				current_user = user
+		current_user = users_collection.find_one(
+				{"username": auth['username']})
 
 		if not current_user:
 			return 'Could not verify', 401
 
-		if check_password_hash(user['password'], auth['password']):
-			token = jwt.encode({'id' : user['id'], 'exp' : datetime.utcnow() + timedelta(weeks=8)}, SECRET_KEY, algorithm='HS256')
+		if check_password_hash(current_user['password'], auth['password']):
+			token = jwt.encode(
+				{
+						'id': str(current_user['_id']),
+						'exp': datetime.utcnow() + timedelta(weeks=8),
+				},
+				SECRET_KEY,
+				algorithm='HS256'
+			)
 
 			return {'token' : token}
 

@@ -1,5 +1,8 @@
 from flask_restplus import Namespace, fields, Resource
 from api.security import token_required
+from database.database import db
+
+users = db.users
 
 user_namespace = Namespace('user', description='User API functions')
 
