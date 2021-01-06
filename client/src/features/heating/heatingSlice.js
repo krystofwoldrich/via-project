@@ -20,8 +20,10 @@ export const fetchHeatingSchedule = createAsyncThunk(
 export const saveHeatingScheduleItem = createAsyncThunk(
 	'heating/saveHeatingScheduleItem',
 	async ({ heatingId, scheduleItem }) => {
-		const method = scheduleItem.id ? 'PUT' : 'POST';
-		const savedScheduleItem = await doRequest(`heating/${heatingId}/schedule`, method, JSON.stringify(scheduleItem));
+		const method = scheduleItem._id ? 'PUT' : 'POST';
+		const url_base = `heating/${heatingId}/schedule`;
+		const url = scheduleItem._id ? `${url_base}/${scheduleItem._id}` : url_base;
+		const savedScheduleItem = await doRequest(url, method, JSON.stringify(scheduleItem));
 		return { heatingId, scheduleItem: savedScheduleItem };
 	},
 );
