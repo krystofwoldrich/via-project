@@ -8,6 +8,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { CardContent, CardMedia, Typography } from '@material-ui/core';
 import Skeleton from '@material-ui/lab/Skeleton';
+import NewHeatingScheduleButton from '../heating/NewHeatingScheduleButton';
+import { updateNewSchedule } from '../heating/heatingSlice';
+import { toISOOptions } from '../calendar/dateTimeOptions';
+
+const DEFAULT_WARM_TEMP = 22;
 
 const useStyles = makeStyles((theme) => ({
 	card: {
@@ -78,8 +83,17 @@ export default function UpcomingForecast() {
 };
 
 export function Forecast({ start, title, iconUrl, temperature }) {
+	const dispatch = useDispatch();
 	const classes = useStyles();
 	const showSetLowTempButton = temperature <= 20;
+
+	const handleSetNewHeatingScheduleWarm = () => {
+		dispatch(updateNewSchedule({
+			temperature: DEFAULT_WARM_TEMP,
+			from: DateTime.fromISO(start).toISO(toISOOptions),
+			to: DateTime.fromISO(start).plus({ hours: 1 }).toISO(toISOOptions),
+		}));
+	};
 
 	return (
 		<Card
@@ -112,7 +126,9 @@ export function Forecast({ start, title, iconUrl, temperature }) {
 			<CardActions>
 				{showSetLowTempButton
 					? 
-							<Button color='primary'>Set heating to warm</Button>
+					<NewHeatingScheduleButton onClick={handleSetNewHeatingScheduleWarm} >
+						Set heating to warm
+					</NewHeatingScheduleButton>
 					: null
 				}
 			</CardActions>
