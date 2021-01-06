@@ -22,11 +22,10 @@ export const mapHeatingToCalendarSchedule = (heatingSchedule) => heatingSchedule
   title: schedule.temperature,
 })) : [];
 
-export const mapCalendarToHeatingSchedule = (calendarSchedule) => ({
+export const mapCalendarToPartialHeatingSchedule = (calendarSchedule) => ({
   _id: calendarSchedule.id,
   from: calendarSchedule.startDate,
   to: calendarSchedule.endDate,
-  temperature: calendarSchedule.title,
 });
 
 export default function HeatingScheduleSingleDay({ heatingId }) {
@@ -54,7 +53,7 @@ export default function HeatingScheduleSingleDay({ heatingId }) {
       const changedEntries = Object.entries(changed);
       changedEntries.forEach(([key, value]) => {
         dispatch(saveHeatingScheduleItem({
-          ...dispatchOptionsBase, scheduleItem: mapCalendarToHeatingSchedule({
+          ...dispatchOptionsBase, scheduleItem: mapCalendarToPartialHeatingSchedule({
             id: key,
             ...value,
           })
