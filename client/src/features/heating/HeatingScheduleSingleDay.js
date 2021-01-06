@@ -34,8 +34,8 @@ export default function HeatingScheduleSingleDay({ heatingId }) {
   const heating = useSelector(getSelectHeating(heatingId));
 
 	useEffect(() => {
-		if (heating === null) {
-			dispatch(fetchHeatingSchedule(heatingId));
+		if (heatingId && heating.schedule === undefined) {
+			dispatch(fetchHeatingSchedule({ heatingId }));
 		}
   });
 
