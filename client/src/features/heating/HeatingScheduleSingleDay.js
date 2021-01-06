@@ -9,6 +9,7 @@ import {
   DragDropProvider,
   EditRecurrenceMenu,
   AppointmentTooltip,
+  AllDayPanel,
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSelectHeating, fetchHeatingSchedule, getSelectHeatingSchedule, removeHeatingScheduleItem, saveHeatingScheduleItem } from './heatingSlice';
@@ -83,6 +84,7 @@ export default function HeatingScheduleSingleDay({ heatingId }) {
         startDayHour={0}
         endDayHour={24}
       />
+      <AllDayPanel />
       <DateNavigator />
       <EditRecurrenceMenu />
       <Appointments />
