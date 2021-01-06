@@ -119,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [openDrawer, setOpenDrawer] = React.useState(true);
+  const [openDrawer, setOpenDrawer] = React.useState(false);
   const [openLoginPopup, setOpenLoginPopup] = React.useState(false);
   const [prevIsUserLogin, setPrevIsUserLogin] = React.useState(false);
   const handleDrawerOpen = () => {
