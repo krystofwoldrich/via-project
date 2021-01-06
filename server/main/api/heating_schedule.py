@@ -56,8 +56,9 @@ class HeatingSchedule(Resource):
 			existingSchedule.update({
 				'setBy': current_user['id'],
 			})
+			del existingSchedule['_id']
 			heatings_sechedules_collection.replace_one({ '_id' : ObjectId(scheduleId) }, existingSchedule)
-			return existingSchedule
+			return heatings_sechedules_collection.find_one({ '_id' : ObjectId(scheduleId), 'heatingId' : heatingId })
 		else:
 			return {}, 400
 
