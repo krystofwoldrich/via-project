@@ -24,5 +24,9 @@ export const doRequest = async (resource, method, body) => {
 		},
 	);
 
+	if (!response.ok) {
+		throw new Error(`Request failed: ${response.text()}`)
+	}
+
 	return response.json();
 }
