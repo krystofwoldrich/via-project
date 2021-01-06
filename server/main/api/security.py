@@ -51,6 +51,7 @@ def token_required(f):
 			print(e)
 			return {'message' : 'Token is invalid!'}, 401
 
+		current_user['id'] = str(current_user['_id'])
 		return f(ref, current_user, *args, **kwargs)
 
 	return decorated
