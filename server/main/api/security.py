@@ -110,7 +110,7 @@ class Login(Resource):
 			return 'Could not verify', 401
 
 		if check_password_hash(user['password'], auth['password']):
-			token = jwt.encode({'id' : user['id'], 'exp' : datetime.utcnow() + timedelta(minutes=30)}, SECRET_KEY, algorithm='HS256')
+			token = jwt.encode({'id' : user['id'], 'exp' : datetime.utcnow() + timedelta(weeks=8)}, SECRET_KEY, algorithm='HS256')
 
 			return {'token' : token}
 
