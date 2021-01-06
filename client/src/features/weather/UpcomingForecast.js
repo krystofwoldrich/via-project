@@ -79,7 +79,7 @@ export default function UpcomingForecast() {
 
 export function Forecast({ start, title, iconUrl, temperature }) {
 	const classes = useStyles();
-	const showSetLowTempButton = temperature <= -1;
+	const showSetLowTempButton = temperature <= 20;
 
 	return (
 		<Card
