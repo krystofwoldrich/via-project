@@ -94,3 +94,17 @@ class HeatingSchedule(Resource):
 		scheduleId = data['id']
 		heating_schedule[scheduleId].update(data)
 		return heating_schedule[scheduleId]
+
+	@heating_schedule_namespace.doc(
+		params={'heatingId': 'Heating ID'},
+		body=heating_schedule_update_model,
+		description='Delete heating schedule',
+		security='apiKey')
+	@heating_schedule_namespace.response(200, 'Success', heating_schedule_model)
+	@token_required
+	def delete(self, current_user, heatingId):
+		data = request.get_json()
+		scheduleId = data['id']
+		removedSchedule = heating_schedule[scheduleId]
+		del heating_schedule[scheduleId]
+		return removedSchedule

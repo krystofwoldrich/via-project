@@ -26,6 +26,7 @@ import Login from '../auth/Login';
 import GoogleAuth from '../auth/GoogleAuth';
 import UpcomingEvents from '../calendar/UpcomingEvents';
 import UpcomingForecast from '../weather/UpcomingForecast';
+import HeatingSummary from '../heating/HeatingSummary';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkSignIn, selectIsUserSignIn, signOut } from '../auth/authSlice';
 
@@ -234,6 +235,12 @@ export const DashboardContent = () => {
 				<Grid item xs>
 					<Paper className={fixedHeightPaper}>
 						<UpcomingForecast />
+					</Paper>
+				</Grid>
+				{/* Heating */}
+				<Grid item xs>
+					<Paper className={fixedHeightPaper}>
+						<HeatingSummary />
 					</Paper>
 				</Grid>
 			</Grid>
