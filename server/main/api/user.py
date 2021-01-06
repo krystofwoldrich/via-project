@@ -29,6 +29,9 @@ user = {
 
 @user_namespace.route('/<id>')
 class User(Resource):
+	def options(self):
+		pass
+
 	@user_namespace.doc(
 		params={'id': 'User ID'},
 		description='Get user detail',

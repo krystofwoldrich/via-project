@@ -44,6 +44,9 @@ heating_schedule = {
 
 @heating_schedule_namespace.route('/<heatingId>/schedule')
 class HeatingSchedule(Resource):
+	def options(self):
+		pass
+
 	@heating_schedule_namespace.doc(
 		params={
 			'heatingId': 'Heating ID',

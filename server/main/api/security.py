@@ -66,6 +66,9 @@ def token_required(f):
 
 @security_namespace.route('/register')
 class Register(Resource):
+	def options(self):
+		pass
+
 	@security_namespace.doc(body=registration_body_model, responses={201: 'Created'}, description="Register a new user")
 	def post(self):
 		data = request.get_json()
@@ -88,6 +91,9 @@ class Register(Resource):
 @security_namespace.route('/login')
 @security_namespace.header('X-Header', 'Some class header')
 class Login(Resource):
+	def options(self):
+		pass
+
 	@security_namespace.doc(body=login_body_model, responses={200: 'OK'}, description="Register a new user")
 	def put(self):
 		auth = request.get_json()

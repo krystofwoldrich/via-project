@@ -29,6 +29,9 @@ heating = {
 
 @heating_namespace.route('/')
 class HeatingList(Resource):
+	def options(self):
+		pass
+
 	@heating_namespace.doc(
 		description='Get heating list',
 		security='apiKey'
