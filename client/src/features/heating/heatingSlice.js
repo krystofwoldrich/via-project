@@ -32,8 +32,8 @@ export const removeHeatingScheduleItem = createAsyncThunk(
 	'heating/removeHeatingScheduleItem',
 	async ({ heatingId, deletedId }) => {
 		if (heatingId && deletedId) {
-			//TODO: send to the server
-			return { heatingId, scheduleItem: { id: deletedId } };
+			await doRequest(`heating/${heatingId}/schedule/${deletedId}`, 'DELETE');
+			return { heatingId, scheduleItem: { '_id': deletedId } };
 		} else {
 			throw Error('Missing heating it and schedule item');
 		}
