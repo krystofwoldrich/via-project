@@ -8,6 +8,36 @@ Google calendar will be used to suggest turning heating down, to save on energy.
 
 [Google calendar API Documentation](https://developers.google.com/calendar/quickstart/js) shows how to use it in application front-end using javascript.
 
+## How to develop
+
+```bash
+# Start the client application with hot-reload
+
+export REACT_APP_API_BASE_URL=http://localhost:5000
+export REACT_APP_GOOGLE_API_KEY=your_google_api_key
+export REACT_APP_GOOGLE_CLIENT_KEY=your_google_client_key
+export REACT_APP_OPEN_WEATHER_API_KEY=your_open_weather_key
+
+cd client
+
+npm install --ignore-scripts
+npm run start
+```
+
+
+```bash
+# Start the server api with hot-reload
+
+export FLASK_ENV=development
+export HEATING_API_SECRET_KEY=fill_in_your_secret_api_key
+export HEATING_API_MONGO_URI=mongodb://your_mongo_instance:27017/
+
+cd server
+
+pipenv install
+pipenv run python main/main.py
+```
+
 ## Presentation
 
 <iframe
